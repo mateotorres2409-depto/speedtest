@@ -3,7 +3,8 @@ on:
   push:
     branches: [ "feature/*" ]
     paths: 
-        - docker/*
+        - docker/CI/*
+        - docker/CD/*
         - .github/workflows/deploy_docker.yaml
         - src/*
   workflow_dispatch:
