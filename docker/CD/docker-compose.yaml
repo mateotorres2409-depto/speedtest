@@ -1,8 +1,6 @@
 services:
   speedtest:
-    build: 
-      dockerfile: ./docker/CI/dockerfile
-      context: ../../
+    image: ${IMAGE_SPEEDTEST}
     ports:
       - 8000:8000
     environment:

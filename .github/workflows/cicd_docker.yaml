@@ -1,0 +1,67 @@
+name: CICD_Docker
+on:
+  push:
+    branches: [ "feature/*" ]
+    paths: 
+        - docker/CI/*
+        - docker/CD/*
+        - .github/workflows/cicd_docker.yaml
+        - src/*
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4.1.7
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.6.1
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3.3.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push Docker image for ARMv7
+        uses: docker/build-push-action@v6.7.0
+        with:
+          context: .
+          platforms: 
+            linux/arm/v7
+            linux/arm/v6
+            linux/386
+            linux/amd64
+          file: docker/CI/dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_USERNAME }}:speedtest-${{ github.run_id }}
+  deploy:
+    needs: build
+    runs-on: 
+      - raspberrypi-2
+      - interno
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4  
+        with: 
+            sparse-checkout: |
+                docker/CD
+            path: checkout_CD_Docker
+      - name: create directory
+        run: |
+            mkdir -p /docker/${{ github.repository }}/docker
+            rm -rf /docker/${{ github.repository }}/docker/*
+            cp -R checkout_CD_Docker/docker/CD/* /docker/${{ github.repository }}/docker
+            ls -ltra /docker/${{ github.repository }}/docker
+      - name: delete checkout
+        run: rm -rf checkout_CD_Docker
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3.3.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: up docker compose
+        env:
+          REPO: ${{ github.repository }}
+          IMAGE_SPEEDTEST: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_USERNAME }}:speedtest-${{ github.run_id }}
+        run: |
+            cd /docker/${{ github.repository }}/docker
+            docker-compose up -d
