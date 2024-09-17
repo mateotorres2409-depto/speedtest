@@ -1,0 +1,33 @@
+name: CD_Docker
+on:
+  push:
+    branches: [ "feature/*" ]
+    paths: 
+        - docker/*
+        - .github/workflows/deploy_docker.yaml
+        - src/*
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4.1.7
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.6.1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3.3.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image for ARMv7
+        uses: docker/build-push-action@v6.7.0
+        with:
+          context: .
+          platforms: linux/arm/v7
+          file: docker/CI/dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_USERNAME }}:speedtest-armv7-latest

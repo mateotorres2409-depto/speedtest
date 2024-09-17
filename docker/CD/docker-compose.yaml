@@ -1,0 +1,10 @@
+services:
+  speedtest:
+    build: 
+      dockerfile: ./docker/CI/dockerfile
+      context: ../../
+    ports:
+      - 8000:8000
+    environment:
+      - UNITS_SPEEDTEST=Mbps
+      - SLEEP_SPEEDTEST=120

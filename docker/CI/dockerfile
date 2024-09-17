@@ -1,0 +1,27 @@
+# export version=1.2.0
+# x86_64 i386 armel armhf aarch64
+# export arq=x86_64 
+
+# https://install.speedtest.net/app/cli/ookla-speedtest-${version}-linux-${arq}.tgz
+
+
+FROM python:3
+
+ENV VERSION_SPEEDTEST 1.2.0
+ENV ARQ_SPEEDTEST aarch64
+
+WORKDIR /usr/src/app
+
+RUN curl -kvvv https://install.speedtest.net/app/cli/ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz -o ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz
+RUN tar xzvf ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz
+RUN rm ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz
+RUN chmod 775 speedtest
+RUN ./speedtest --accept-license
+
+COPY src/requirements.txt ./requirements.txt
+RUN pip install -r requirements.txt
+COPY src/main.py main.py
+
+EXPOSE 8000
+
+CMD [ "python", "main.py" ]
