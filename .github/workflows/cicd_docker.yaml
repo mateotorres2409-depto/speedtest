@@ -29,6 +29,10 @@ jobs:
           file: docker/CI/dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_USERNAME }}:speedtest-${{ github.run_id }}
+          build-args: |
+            VERSION_SPEEDTEST=1.2.0
+            ARQ_SPEEDTEST=aarch64
+            PORT_METRICS=9090
   deploy:
     needs: build
     runs-on: 
@@ -58,6 +62,7 @@ jobs:
         env:
           REPO: ${{ github.repository }}
           IMAGE_SPEEDTEST: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_USERNAME }}:speedtest-${{ github.run_id }}
+          PORT_SPEEDTEST: 9090
         run: |
             cd /docker/${{ github.repository }}/docker
             docker-compose up -d

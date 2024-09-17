@@ -21,7 +21,8 @@ def getMetrics(units):
 if __name__ == "__main__":
     units =  os.environ.get("UNITS_SPEEDTEST", "bps")
     sleep = os.environ.get("SLEEP_SPEEDTEST", 120)
-    start_http_server(8000)
+    port = os.environ.get("PORT_METRICS", 8000)
+    start_http_server(int(port))
     getMetrics(units)
     while True:
         time.sleep(int(sleep))

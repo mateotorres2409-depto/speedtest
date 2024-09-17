@@ -1,11 +1,11 @@
 services:
   speedtest:
     image: ${IMAGE_SPEEDTEST}
-    ports:
-      - 8000:8000
+    container_name: speedtest_interno
     environment:
       - UNITS_SPEEDTEST=Mbps
       - SLEEP_SPEEDTEST=120
+      - PORT_METRICS=${PORT_SPEEDTEST}
     restart: always
     networks:
       - prometheus
