@@ -1,31 +1,15 @@
-ARG TARGETPLATFORM
 FROM python:3.9.20-alpine3.20
 RUN apk --no-cache add curl
 
 ARG VERSION_SPEEDTEST=1.2.0
-
-# Definir lo que se ejecutará según la arquitectura
-RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-        export ARQ_SPEEDTEST=aarch64 \
-        curl -kvvv https://install.speedtest.net/app/cli/ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz -o ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz \
-        tar xzvf ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz \
-        rm ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz; \
-    elif [ "$TARGETPLATFORM" = "linux/arm/v7" ]; then \
-        export ARQ_SPEEDTEST=armhf \
-        curl -kvvv https://install.speedtest.net/app/cli/ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz -o ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz \
-        tar xzvf ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz \
-        rm ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz; \
-    else \
-      echo "Unknown platform $TARGETPLATFORM" ; \
-      exit 1; \
-    fi
+ARG ARQ_SPEEDTEST=aarch64
 
 
 WORKDIR /usr/src/app
 
-#RUN curl -kvvv https://install.speedtest.net/app/cli/ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz -o ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz
-#RUN tar xzvf ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz
-#RUN rm ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz
+RUN curl -kvvv https://install.speedtest.net/app/cli/ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz -o ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz
+RUN tar xzvf ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz
+RUN rm ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz
 RUN chmod 775 speedtest
 RUN ./speedtest --accept-license
 
