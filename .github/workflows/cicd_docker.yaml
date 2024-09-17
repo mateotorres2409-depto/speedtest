@@ -25,7 +25,7 @@ jobs:
         uses: docker/build-push-action@v6.7.0
         with:
           context: .
-          platforms: linux/arm/v7
+          platforms: linux/arm/v7,linux/arm64
           file: docker/CI/dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_USERNAME }}:speedtest-${{ github.run_id }}
