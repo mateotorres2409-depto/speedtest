@@ -26,13 +26,14 @@ jobs:
         with:
           context: .
           platforms: 
-            linux/arm/v7
-            linux/arm/v6
-            linux/386
-            linux/amd64
+            - linux/arm/v7
+            - linux/arm/v6
+            - linux/386
+            - linux/amd64
           file: docker/CI/dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_USERNAME }}:speedtest-${{ github.run_id }}
+          tags: 
+            - ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_USERNAME }}:speedtest-${{ github.run_id }}
   deploy:
     needs: build
     runs-on: 
