@@ -1,5 +1,5 @@
 ARG TARGETPLATFORM
-FROM --platform=$TARGETPLATFORM python:3.9.20-alpine3.20
+FROM python:3.9.20-alpine3.20
 RUN apk --no-cache add curl
 
 ARG VERSION_SPEEDTEST=1.2.0
@@ -16,7 +16,7 @@ RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
         tar xzvf ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz \
         rm ookla-speedtest-${VERSION_SPEEDTEST}-linux-${ARQ_SPEEDTEST}.tgz; \
     else \
-      echo "Unknown platform"; \
+      echo "Unknown platform $TARGETPLATFORM" ; \
       exit 1; \
     fi
 
