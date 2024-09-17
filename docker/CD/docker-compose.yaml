@@ -6,3 +6,8 @@ services:
     environment:
       - UNITS_SPEEDTEST=Mbps
       - SLEEP_SPEEDTEST=120
+    restart: always
+    networks:
+      - prometheus
+networks:
+  prometheus:
