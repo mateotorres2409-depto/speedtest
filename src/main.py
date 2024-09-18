@@ -32,8 +32,8 @@ if __name__ == "__main__":
     port = os.environ.get("PORT_METRICS", 9090)
     start_http_server(int(port))
     getMetrics()
-    while True:
-        time.sleep(int(sleep))
-        getMetrics()
+    #while True:
+    #    time.sleep(int(sleep))
+    #    getMetrics()
 else:
     print("File one executed when imported")

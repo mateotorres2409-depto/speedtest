@@ -3,7 +3,6 @@ services:
     image: ${IMAGE_SPEEDTEST}
     container_name: speedtest_interno
     environment:
-      - UNITS_SPEEDTEST=bps
       - SLEEP_SPEEDTEST=300
       - PORT_METRICS=${PORT_SPEEDTEST}
     restart: always
