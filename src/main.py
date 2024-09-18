@@ -31,7 +31,7 @@ def getMetrics():
         upload_bytes_metric.set(response['upload']['bytes'])
         download_elapsed_metric.set(response['download']['elapsed'])
         upload_elapsed_metric.set(response['upload']['elapsed'])
-        print(response['type']+" - "+response['2024-09-18T00:33:49Z'])
+        print(response['type']+" - "+response['timestamp'])
     else:
         print("Se genero error!")
 
